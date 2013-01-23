@@ -1,0 +1,1784 @@
+//main script
+//Author: Raghav Garg
+//Email: Btech_IT_041_2009@ipu.edu , rock.raghavag@gmail.com
+
+
+function doGet() {
+  var app = UiApp.createApplication();
+  app.setTitle("Personal Web Manager Application");
+  
+  var hpanel= app.createHorizontalPanel().setId("hpanel").setBorderWidth(1);
+  var mainPanel = app.createVerticalPanel().setId("mainPanel").setBorderWidth(1).setStyleAttribute('background','#f7fafd');
+  var gridPanel = app.createGrid().setId('gridp').setBorderWidth(1).setStyleAttribute('background','skyblue');
+  
+  
+  mainPanel.setSize("100%","100%");
+  
+  //var doc = SpreadsheetApp.getActiveSpreadsheet();
+  // var name = Session.getActiveUser().getUserLoginId(); 
+  
+  var vpanel= app.createVerticalPanel().setId("vpanel").setBorderWidth(1);
+  
+  //defining widgets in the panel
+    
+  var logo = app.createImage('http://4.bp.blogspot.com/-_IKQaVDRFeg/UDZ1vw6m0OI/AAAAAAAAANQ/ATZSAxb9mqY/s1600/ContactUs-1_1.355145629_std.jpg').setSize("150","150");
+  var appLabel = app.createLabel("Managing all your contacts").setId("manage").setStyleAttribute("color", "red");  
+  var Label= app.createLabel("Last Updated: " +new Date().toString()).setId("Label");  
+  var mouseoverhandler =app.createServerMouseHandler("mousehandler");
+  mouseoverhandler.addCallbackElement(mainPanel);
+  var addcontactbutton = app.createLabel("Add a contact").setStyleAttribute("backgroundColor", "#7a7b77").setId("addcontact").addMouseOverHandler(mouseoverhandler);
+  var listcontactbutton = app.createLabel("List all contacts").setStyleAttribute("backgroundColor", "#7a7b77").setId("listallcontacts").addMouseOverHandler(mouseoverhandler);
+ 
+  var creategroupbutton = app.createLabel("Create a group").setStyleAttribute("backgroundColor", "#7a7b77").setId("creategroup").addMouseOverHandler(mouseoverhandler);
+  
+  var listgroupbutton = app.createLabel("List all groups").setStyleAttribute("backgroundColor", "#7a7b77").setId("listgroup").addMouseOverHandler(mouseoverhandler);
+  
+  var createeventbutton = app.createLabel("Create an event").setStyleAttribute("backgroundColor", "#7a7b77").setId("createevent").addMouseOverHandler(mouseoverhandler);
+  var groupemailbutton =app.createLabel("Group email").setStyleAttribute("backgroundColor", "#7a7b77").setId("groupemail").addMouseOverHandler(mouseoverhandler);
+  var contactusbutton  = app.createLabel("Help").setStyleAttribute("backgroundColor", "#7a7b77").setId("contactus").addMouseOverHandler(mouseoverhandler);
+  var listalleventbutton = app.createLabel("List all events").setStyleAttribute("backgroundColor", "#7a7b77").setId("listallevent").addMouseOverHandler(mouseoverhandler);   
+  //adding click handler to all buttons
+  
+  
+  var addcontacthandler = app.createServerClickHandler('addcontact');
+  addcontacthandler.addCallbackElement(gridPanel);   
+  addcontactbutton.addClickHandler(addcontacthandler); 
+  
+  
+  var listcontacthandler = app.createServerClickHandler('listcontact');
+  listcontacthandler.addCallbackElement(gridPanel);   
+  listcontactbutton.addClickHandler(listcontacthandler); 
+  
+ 
+  
+  var creategrouphandler = app.createServerClickHandler('creategroup');
+  creategrouphandler.addCallbackElement(gridPanel);   
+  creategroupbutton.addClickHandler(creategrouphandler);     
+  
+  
+  var listgrouphandler= app.createServerClickHandler('listgroup');
+  listgrouphandler.addCallbackElement(gridPanel);
+  listgroupbutton.addClickHandler(listgrouphandler);
+    
+ 
+  
+  var createeventhandler= app.createServerClickHandler('createevent');
+  createeventhandler.addCallbackElement(gridPanel);
+  createeventbutton.addClickHandler(createeventhandler);
+
+  
+  var groupemailhandler= app.createServerClickHandler('groupemail');
+  groupemailhandler.addCallbackElement(gridPanel);
+  groupemailbutton.addClickHandler(groupemailhandler);
+  
+  
+  var contactushandler= app.createServerClickHandler('contactus');
+  contactushandler.addCallbackElement(gridPanel);
+  contactusbutton.addClickHandler(contactushandler);
+  
+     
+  var listalleventhandler= app.createServerClickHandler('listallevent');
+  listalleventhandler.addCallbackElement(gridPanel);
+  listalleventbutton.addClickHandler(listalleventhandler);
+  
+  
+  //refresh button
+  
+  var refreshbutton = app.createLabel("Click to Refresh").setStyleAttribute("backgroundColor", "#7a7b77").setId("refresh");      
+  var refreshhandler = app.createServerClickHandler('refresh');
+  refreshhandler.addCallbackElement(mainPanel);   
+  refreshbutton.addClickHandler(refreshhandler);
+    
+  
+  
+  //adding widgets to the panel
+  
+  mainPanel.add(Label);
+  mainPanel.add(refreshbutton);
+  mainPanel.add(logo);
+  mainPanel.add(appLabel);
+  
+  mainPanel.add(addcontactbutton);    
+  mainPanel.add(listcontactbutton);
+  
+  //mainPanel.add(deleteallbutton);
+  mainPanel.add(creategroupbutton);
+  mainPanel.add(listgroupbutton);   
+  //mainPanel.add(deleteallgroupbutton);
+  //  mainPanel.add(addtogroupbutton);
+  mainPanel.add(createeventbutton);
+  mainPanel.add(groupemailbutton);
+  mainPanel.add(listalleventbutton); 
+  mainPanel.add(contactusbutton);
+  
+  //adding panel to app
+  
+  hpanel.add(mainPanel);
+  hpanel.add(gridPanel); 
+  hpanel.add(vpanel);
+  app.add(hpanel);
+  
+  
+  return app;
+}
+
+
+//function for refresh button
+
+  
+function refresh(e){
+  
+  var app = UiApp.getActiveApplication();    
+  app.getElementById('Label').setText("Last Updated: " +new Date().toString());
+  
+  return app;
+  
+}
+
+
+
+//function to add a contact
+
+
+
+function addcontact(f)
+{
+var app=UiApp.getActiveApplication();
+  //panel=app.createVerticalPanel();
+var gridPanel=app.getElementById('gridp');
+ 
+gridPanel.resize(6, 2);
+  //var panel=app.createVerticalPanel();
+ var hpanel=app.getElementById('hpanel');
+var label1= app.createLabel("enter first name");
+gridPanel.setWidget(0, 0,label1);
+var name= app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+name.setName("name");
+gridPanel.setWidget(0, 1,name);
+var label2=app.createLabel("enter last name");
+gridPanel.setWidget(1, 0,label2);
+var familyname=app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+familyname.setName("familyname");
+gridPanel.setWidget(1, 1,familyname);
+var label3=app.createLabel("enter address");
+
+gridPanel.setWidget(2, 0,label3);
+var address=app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+address.setName("address");
+gridPanel.setWidget(2, 1,address);
+var label4=app.createLabel("mobile no");
+
+gridPanel.setWidget(3, 0,label4);
+  var mobile=app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+mobile.setName("mobile");
+gridPanel.setWidget(3, 1,mobile);
+var label5=app.createLabel("email address");
+
+gridPanel.setWidget(4, 0,label5);
+var email=app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+email.setName("email");
+gridPanel.setWidget(4, 1,email);
+  gridPanel.setWidget(5, 1,app.createLabel(" "));
+var button= app.createButton().setTitle('submit').setSize('90','25').setText('submit');
+  gridPanel.setWidget(5, 0,button);
+var ClickHandler= app.createServerClickHandler('onpress');
+  button.addClickHandler(ClickHandler);
+ ClickHandler.addCallbackElement(gridPanel);
+  hpanel.add(gridPanel);
+ 
+  return app;
+}
+
+
+
+//function to submit of add a contact
+
+function onpress(e)
+{
+var app= UiApp.getActiveApplication();
+  var vpanel=app.getElementById('vpanel').setVisible(true);
+
+  try
+  {
+    var name=e.parameter.name||" ";
+  }
+  catch(a)
+  {
+    name = " ";
+  }
+  try
+  {
+    var familyname=e.parameter.familyname||" ";
+  }
+  catch(a)
+  {
+    familyname=" ";
+  }
+  try
+  {
+    var address=e.parameter.address||" ";
+  }
+  catch(a)
+  {
+    address=" ";
+  }
+  try
+  {
+    var mobile=e.parameter.mobile||" ";
+  }
+  catch(a)
+  {
+    mobile = " ";
+  }
+
+ var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; 
+  if(emailPattern.test(e.parameter.email) == true)
+  {
+    var email=e.parameter.email;
+  }
+else
+{
+  var email=" ";
+}
+  
+ var x =" ";
+var c = ContactsApp.createContact(name,familyname, email);
+  Utilities.sleep(4000);
+  var contact = ContactsApp.getContactById(c.getId());
+  if(mobile==" "|| mobile== "")
+  {
+  }
+
+  else{
+    contact.addPhone("home",mobile);
+  }
+  
+  contact.addAddress("home",address);
+ 
+   var label= app.createLabel("contact added successfully");
+  app.add(label);
+  app.add(vpanel);
+  vpanel.clear();
+  //Browser.msgBox("new contact added successfully");
+return app.close();
+  
+}
+
+
+
+//function to list all contacts
+
+
+function listcontact(s){
+  
+  var app=UiApp.getActiveApplication();
+ 
+  var gridPanel=app.getElementById('gridp');
+  var hpanel=app.getElementById('hpanel');
+  var contacts = ContactsApp.getContacts();
+ 
+ 
+  var numofcontact =contacts.length;
+  gridPanel.resize(numofcontact+2, 8);
+ 
+
+    gridPanel.setWidget(0, 0,app.createLabel("NAME"));
+    //gridPanel.setWidget(0, 1,app.createLabel("LAST NAME"));
+    gridPanel.setWidget(0, 3,app.createLabel("ADDRESS"));
+    gridPanel.setWidget(0, 2,app.createLabel("PHONE NO"));
+    gridPanel.setWidget(0, 1,app.createLabel("EMAIL ADDRESS"));
+    gridPanel.setWidget(0, 5,app.createLabel(" "));
+    gridPanel.setWidget(0, 6,app.createLabel(" "));
+    gridPanel.setWidget(0, 4,app.createLabel(" ")); 
+    
+  
+    var deleteithandler = app.createServerClickHandler("handlingfunction");
+    deleteithandler.addCallbackElement(gridPanel);
+    
+  
+    var viewhandler = app.createServerClickHandler("handlingfunction");
+    viewhandler.addCallbackElement(gridPanel);
+    
+  
+    var addnotehandler = app.createServerClickHandler("addnote");
+    addnotehandler.addCallbackElement(gridPanel);
+    
+  var sendemailhandler = app.createServerClickHandler("handlingfunction");
+    sendemailhandler.addCallbackElement(gridPanel);
+    
+        
+  for(var i=0;i<numofcontact;i++)
+   {
+   
+        //Get the full name, If it is null, display 'Not available'
+          if(contacts[i].getFullName()!='')gridPanel.setWidget(i+1, 0, app.createLabel(contacts[i].getFullName()));
+        else
+          gridPanel.setWidget(i+1, 0, app.createLabel('Not Available').setStyleAttribute('color', 'red'));
+        
+        //Get the First Email address, If it is undefined, display 'Not Available'
+        try{
+          gridPanel.setWidget(i+1, 1, app.createLabel(contacts[i].getEmails()[0].getAddress()));
+        }
+        catch(e){
+          gridPanel.setWidget(i+1, 1, app.createLabel('Not Available').setStyleAttribute('color', 'red'));
+        }
+        
+        //Get the first phone number, If it is undefined, display 'Not Available'
+        try{
+          gridPanel.setWidget(i+1, 2, app.createLabel(contacts[i].getPhones()[0].getPhoneNumber())); 
+        }
+        catch(e){
+          gridPanel.setWidget(i+1, 2, app.createLabel('Not Available').setStyleAttribute('color', 'red'));
+        }
+        
+        //Get the first address, If it is undefined, display 'Not Available'
+        try{
+          gridPanel.setWidget(i+1, 3, app.createLabel(contacts[i].getAddresses()[0].getAddress())); 
+        }
+        catch(e){
+          gridPanel.setWidget(i+1, 3, app.createLabel('Not Available').setStyleAttribute('color', 'red'));
+        }
+
+     
+     var sendemailbutton = app.createButton("send email").setId("x"+i);
+     sendemailbutton.addClickHandler(sendemailhandler);
+     var mouseoverhandler =app.createServerMouseHandler("mousehandler");
+  mouseoverhandler.addCallbackElement(gridPanel);
+     
+  var deleteitbutton = app.createButton("delete it!").setId("d"+i);
+    var addnotebutton = app.createButton("add note").setId("a"+i);
+    addnotebutton.addClickHandler(addnotehandler);
+    var viewbutton = app.createButton("view").setId("v"+i);
+    deleteitbutton.addClickHandler(deleteithandler);
+    viewbutton.addClickHandler(viewhandler);
+    gridPanel.setWidget(i+1, 4, deleteitbutton);
+    gridPanel.setWidget(i+1, 5, viewbutton);
+    gridPanel.setWidget(i+1, 6, addnotebutton);
+
+     gridPanel.setWidget(i+1, 7, sendemailbutton);
+     
+  }
+
+  var deleteallhandler = app.createServerClickHandler('deleteall');
+  deleteallhandler.addCallbackElement(gridPanel);   
+     
+  
+  var deleteallbutton = app.createButton("Delete all contacts");
+  deleteallbutton.addClickHandler(deleteallhandler);
+  
+  var emptylabel= app.createLabel(" ");
+  gridPanel.setWidget(i+1, 0, deleteallbutton);
+  for(var k= 1;k<6;k++)
+  {
+  gridPanel.setWidget(i+1, k, emptylabel);
+  }
+    hpanel.add(gridPanel);
+
+     
+         return app;
+ }
+
+
+
+
+
+
+function handlingfunction(e){
+
+  var app = UiApp.getActiveApplication();
+  var gridPanel=app.getElementById('gridp');
+  var hpanel = app.getElementById('hpanel');  
+  var action = e.parameter.source.charAt(0);
+  var row = +e.parameter.source.substr(1);
+  
+  if(action == "x"){
+  var contacts = ContactsApp.getContacts();
+    var contact= contacts[row];
+   gridPanel.resize(3,2);
+    gridPanel.setWidget(0,0, app.createLabel("subject: "));
+    gridPanel.setWidget(1,0, app.createLabel("mail: "));                    
+    gridPanel.setWidget(2,0, app.createLabel(" ")); 
+  var subjecttb = app.createTextBox().setName("subjecttb").setId("subjecttb");
+  var mailtb = app.createTextArea().setName("mailtb").setId("mailtb");
+  var sendh = app.createServerClickHandler("sendmailc");
+    sendh.addCallbackElement(gridPanel);
+    var sendb = app.createButton("send mail").setId("y"+row);
+   sendb.addClickHandler(sendh); 
+    gridPanel.setWidget(0,1, subjecttb);
+    gridPanel.setWidget(1,1, mailtb);                    
+    gridPanel.setWidget(2,1, sendb); 
+    return app;                
+                        
+    }
+  
+  if( action == "v" ) {
+    
+ 
+  var contacts = ContactsApp.getContacts();
+  createDatePicker(app);
+  gridPanel.resize(18,2);
+  var contact = contacts[row];
+   group=contact.getContactGroups();
+    numofgroup = group.length;
+    var label = " ";
+    if(numofgroup>0){
+      for(var i=0;i<numofgroup;i++)
+      {
+       var groupname = group[i].getName();
+       label = label+","+groupname; 
+      
+      }
+    }
+    var glabel = app.createLabel(label);
+  gridPanel.setWidget(16,1,glabel);
+  gridPanel.setWidget(16,0,app.createLabel(" groups associated with this contact")); 
+  gridPanel.setWidget(0,0,app.createLabel("first name"));
+  gridPanel.setWidget(1,0,app.createLabel("last name"));
+  gridPanel.setWidget(2,0,app.createLabel("address"));
+  gridPanel.setWidget(3,0,app.createLabel("phone no"));
+  gridPanel.setWidget(4,0,app.createLabel("email"));
+  gridPanel.setWidget(5,0,app.createLabel("notes associated"));
+  var name = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  name.setText(contact.getGivenName()||"").setName("name");
+  var lastname = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  lastname.setText(contact.getFamilyName()||"").setName("lastname");
+  var address = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    try{address.setText(contact.getAddresses()[0].getAddress()||"").setName("address");
+       }
+    catch(e)
+    {address.setText("").setName("address");
+    }
+      var phone = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    try{phone.setText(contact.getPhones()[0].getPhoneNumber()||"").setName("phone");
+       }catch(e){
+         phone.setText("").setName("phone");}
+    
+        var email = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  email.setText(contact.getPrimaryEmail()||"").setName("email");
+  var note = app.createTextArea().setStyleAttribute('marginLeft', '20').setWidth('300').setHeight('100').setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+   var text = contact.getNotes() || " ";
+    note.setText(text).setName("note");
+    
+  
+  gridPanel.setWidget(0,1,name);
+  gridPanel.setWidget(1,1,lastname);
+  gridPanel.setWidget(2,1,address);
+  gridPanel.setWidget(3,1,phone);
+  gridPanel.setWidget(4,1,email);
+  gridPanel.setWidget(5,1,note);
+
+  var saveithandler = app.createServerClickHandler('saveit');
+  saveithandler.addCallbackElement(gridPanel);
+  
+  var saveitbutton= app.createButton("save it");
+  saveitbutton.addClickHandler(saveithandler).setId("h"+row);
+
+  var emptylabel= app.createLabel(" ");
+  
+  gridPanel.setWidget(6,0,emptylabel);
+  gridPanel.setWidget(6,1,emptylabel);
+  gridPanel.setWidget(7,0,app.createLabel("communication method"));
+  gridPanel.setWidget(7,1,emptylabel);  
+  gridPanel.setWidget(8,0,emptylabel);
+  gridPanel.setWidget(9,0,emptylabel);
+  gridPanel.setWidget(10,0,emptylabel); 
+  gridPanel.setWidget(11,0,emptylabel);
+  gridPanel.setWidget(12,0,emptylabel);  
+   
+  var phonecheck = app.createCheckBox("phone").setName("phonecheck");
+  var emailcheck = app.createCheckBox("email").setName("emailcheck");
+    var inpersoncheck = app.createCheckBox("in person").setName("inpersoncheck");
+  var faxcheck = app.createCheckBox("fax").setName("faxcheck");
+  var changehandler = app.createServerChangeHandler("change");
+    changehandler.addCallbackElement(gridPanel);
+    var othercheck = app.createCheckBox("other").setName("othercheck").addValueChangeHandler(changehandler).setId("othercheck");
+    
+  var othertext = app.createTextBox().setName("othertext").setEnabled(false).setId("othertext");
+   
+  gridPanel.setWidget(8,1,phonecheck);  
+  gridPanel.setWidget(9,1,emailcheck);  
+  gridPanel.setWidget(10,1,inpersoncheck);  
+  gridPanel.setWidget(11,1,faxcheck);  
+  gridPanel.setWidget(12,1,othercheck);  
+  var datehandler = app.createServerClickHandler("pickDate");
+  var datecontacted = app.createTextBox().addClickHandler(datehandler).setName("datecontacted");
+ gridPanel.setWidget(13,0,app.createLabel("tick other for this"));  
+  gridPanel.setWidget(13,1,othertext);
+  gridPanel.setWidget(14,0,app.createLabel("date contacted"));
+  gridPanel.setWidget(14,1,datecontacted);  
+  
+  var nextdate = app.createTextBox().addClickHandler(datehandler).setName("nextdate");
+    
+    
+  gridPanel.setWidget(15,0,app.createLabel("next date to contact"));
+  gridPanel.setWidget(15,1,nextdate);   
+   gridPanel.setWidget(17,0,emptylabel);
+  gridPanel.setWidget(17,1,saveitbutton); 
+    
+    hpanel.add(gridPanel);
+ 
+  return app;
+  
+    
+    
+  }
+  
+  
+  else if( action == "d" ) {
+  //delete  
+  
+  var contacts = ContactsApp.getContacts();
+
+
+   contacts[row].deleteContact();
+  
+    
+  }
+}  
+ 
+
+function sendmailc(e){
+var app = UiApp.getActiveApplication();
+  var vpanel = app.getElementById("vpanel");
+  var hpanel = app.getElementById("hpanel");
+  var gridPanel= app.getElementById("gridp");
+  var subjecttb = e.parameter.subjecttb;
+  var mailtb = e.parameter.mailtb;
+  var action = e.parameter.source.charAt(0);
+  var row = +e.parameter.source.substr(1);
+  var contacts = ContactsApp.getContacts();
+  var contact = contacts[row];
+  var email = contact.getPrimaryEmail();
+  MailApp.sendEmail(email, subjecttb, mailtb);
+  return app;
+  
+}
+
+function change(e)
+{
+  var app = UiApp.getActiveApplication();
+  var  vpanel = app.getElementById("vpanel");
+  var  hpanel = app.getElementById("hpanel");
+  var  gridPanel = app.getElementById("gridp");
+  var othercheck = e.parameter.othercheck;
+  app.add(app.createLabel(othercheck));
+  var othertext = app.getElementById("othertext");
+  if(othercheck == "true"){
+  othertext.setEnabled(true);
+  }
+  else if(othercheck == "false")
+  {
+    othertext.setEnabled(false);
+  }
+return app;
+}
+
+
+
+function saveit(e){
+
+var app= UiApp.getActiveApplication();
+  var vpanel=app.getElementById('vpanel');
+  var gridPanel = app.getElementById("gridp");
+  var action = e.parameter.source.charAt(0);
+  
+  var row = +e.parameter.source.substr(1);
+  var contacts= ContactsApp.getContacts();
+  var contact = contacts[row];
+  
+  var phonecheck = e.parameter.phonecheck;
+  var emailcheck = e.parameter.emailcheck;
+  var inpersoncheck = e.parameter.inpersoncheck;
+  var faxcheck = e.parameter.faxcheck;
+  var othertext = e.parameter.othertext;
+  
+  try{var name=e.parameter.name||" "}catch(a){name = " "}; 
+  try{var familyname=e.parameter.lastname||" "}catch(a){familyname=" "};
+  try{var address=e.parameter.address||" "}catch(a){address=" "};
+  try{var mobile=e.parameter.phone||" "}catch(a){mobile = " "};
+  try{var email=e.parameter.email||" "}catch(a){email = " "};
+  try{var note=e.parameter.note||" "}catch(a){note = " "};
+  var label= app.createLabel("contact edited successfully");
+  app.add(label);
+  app.add(vpanel);
+  contact.setGivenName(name);
+  contact.setFamilyName(familyname);
+ // contact.setNotes(note);
+  contact.addAddress("home", address);
+  contact.addEmail("home", email);
+  try{
+  contact.addPhone("home", mobile);
+  }
+  catch(a){
+ contact.addPhone("home", " ");
+ }
+  
+  var datecontacted = e.parameter.datecontacted;
+  var nextdate = e.parameter.nextdate;
+  
+  if(phonecheck == "true")
+  {
+    note = note+" mode of communication was phone, ";
+  } 
+  
+  if(emailcheck == "true")
+  {
+    note = note+" mode of communication was email, ";
+  } 
+    
+    if(inpersoncheck == "true")
+  {
+    note = note+" mode of communication was in person, ";
+  } 
+  
+    if(faxcheck == "true")
+  {
+    note = note+" mode of communication was fax, ";
+  } 
+  
+  if(othertext != "")
+  {
+    note = note+ " mode of communication was " +othertext;
+  }
+  if(datecontacted != "")
+  {
+  note = note+ "\n and date contacted was: "+datecontacted;
+  } 
+  if(nextdate!= "")
+  {
+    note= note +" and you have to contact at: " +nextdate;
+  }
+  contact.setNotes(note); 
+  
+  return app;
+  
+
+
+
+
+}
+
+  
+
+function addnote(e){
+var app= UiApp.getActiveApplication();
+  var hpanel= app.getElementById("hpanel");
+  var gridPanel = app.getElementById("gridp");
+  
+  var action = e.parameter.source.charAt(0);
+  var row = +e.parameter.source.substr(1);
+  //app.add(app.createLabel(row));
+  //row.setName("row");
+  //var ind = row;
+ 
+  var okhandler = app.createServerClickHandler("ok");
+  okhandler.addCallbackElement(gridPanel);
+  
+  gridPanel.resize(2,2);
+  var notelabel = app.createLabel("add a note to this contact");
+  var note = app.createTextArea().setStyleAttribute('marginLeft', '20').setWidth('300').setHeight('100').setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  note.setName("note");
+  var emptylabel= app.createLabel(" ");
+  var okbutton = app.createButton("okay");
+  okbutton.addClickHandler(okhandler).setId(row);
+  gridPanel.setWidget(0,0,notelabel);
+  gridPanel.setWidget(0,1,note);
+  
+  gridPanel.setWidget(1,0,emptylabel);
+  gridPanel.setWidget(1,1,okbutton);
+  
+  hpanel.add(gridPanel);
+  app.add(hpanel);
+  return app;
+  
+  
+
+}
+
+
+
+function ok(a){
+var app = UiApp.getActiveApplication();
+  var row = +a.parameter.source;
+var hpanel= app.getElementById("hpanel");
+  var gridPanel = app.getElementById("gridp");
+  //var row = a.parameter.row;
+  var note = a.parameter.note;
+  var contacts = ContactsApp.getContacts();
+  var contact = contacts[row];
+ var earliernote = contact.getNotes()||" ";
+  contact.setNotes(earliernote+" "+note);
+ app.add(app.createLabel(note+ " has been added"));
+  return app;
+  
+ }
+  
+
+
+
+
+
+function deleteall(){
+  var app=UiApp.getActiveApplication();
+  
+  var contacts=ContactsApp.getContacts();
+var vpanel=app.getElementById('vpanel').setVisible(true);
+  for(var i=0;i<contacts.length;i++)
+  {
+   contacts[i].deleteContact();
+    }
+  var s= app.createLabel("all contact has been deleted");
+app.add(s);
+  return app;
+}
+
+  
+
+
+
+
+
+
+  
+
+//for creating a new group  
+
+function creategroup(a)
+{
+ var app= UiApp.getActiveApplication();
+  var vpanel = app.getElementById("vpanel");
+  var hpanel = app.getElementById("hpanel");
+  var gridPanel = app.getElementById("gridp");
+
+  gridPanel.resize(2,2);
+  var label = app.createLabel("enter name of the group to create");
+  var groupname = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000").setName("groupname").setId("groupname");
+  var button = app.createButton("create");
+  var emptylabel = app.createLabel("");
+ 
+  gridPanel.setWidget(0, 0,label);
+  gridPanel.setWidget(0, 1,groupname);
+  gridPanel.setWidget(1, 0,emptylabel);
+  gridPanel.setWidget(1, 1,button);
+  
+  var clickhandler = app.createServerClickHandler('create');
+  button.addClickHandler(clickhandler);
+  clickhandler.addCallbackElement(gridPanel);
+  
+  
+  
+ 
+
+  return app;
+}  
+
+
+//create of group
+function create(x)
+{
+  var app= UiApp.getActiveApplication();
+  var vpanel=app.getElementById('vpanel');
+  var gridPanel =app.getElementById('gridPanel');
+ var groupname= x.parameter.groupname;
+  
+  ContactsApp.createContactGroup(groupname);
+   app.add(app.createLabel("contact group "+groupname+" has been created"));
+  return app;
+}
+
+
+
+
+
+function addcontactgroup(a)
+{
+  var app=UiApp.createApplication();
+  var gridPanel=app.getElementById('gridp'); 
+  gridPanel.resize(2,2);
+  var hpanel=app.getElementById('hpanel');
+  var vpanel=app.getElementById('vpanel').setVisible(true);
+  gridPanel.setWidget(0, 0,app.createLabel("enter name of the new group to create"));
+  var textbox= app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  textbox.setName("textbox");
+  gridPanel.setWidget(0, 1,textbox);
+  gridPanel.setWidget(1, 0,app.createLabel(""));
+  var button= app.createButton("CREATE");
+  gridPanel.setWidget(1, 1,button);
+  
+  
+  var createhandler= app.createServerClickHandler('create');
+  button.addClickHandler(createhandler);
+  createhandler.addCallbackElement(gridPanel);
+  
+  //var ClickHandler1= app.createServerClickHandler('cancel');
+  //button1.addClickHandler(ClickHandler1);
+ //ClickHandler1.addCallbackElement(vpanel);
+  
+  
+ 
+  hpanel.add(gridPanel);
+  app.add(hpanel);
+  return app;
+}  
+
+
+
+
+
+
+
+
+
+function listgroup(a){
+  var app = UiApp.getActiveApplication();
+  var vpanel = app.getElementById("vpanel");
+  var hpanel = app.getElementById("hpanel");
+  var gridPanel = app.getElementById("gridp");
+  contactgroup = ContactsApp.getContactGroups();
+  var lengthofgroup = contactgroup.length;
+  var deletegrouphandler = app.createServerClickHandler('grouphandler');
+    deletegrouphandler.addCallbackElement(gridPanel);
+  
+  var showhandler = app.createServerClickHandler('grouphandler');
+  showhandler.addCallbackElement(gridPanel);
+  
+  var addtogrouphandler = app.createServerClickHandler('grouphandler');
+  addtogrouphandler.addCallbackElement(gridPanel);
+  
+  gridPanel.resize((lengthofgroup+1),4);
+  for(var i=0; i< lengthofgroup; i++)
+  {
+  var groupname = contactgroup[i].getName();
+    //groupname.setName("groupname");
+
+    
+    
+    
+   if(groupname.match(/System[\sa-zA-Z:]*/)== null)
+  
+   {
+     var deletegroupbutton = app.createButton("delete group");
+     deletegroupbutton.addClickHandler(deletegrouphandler).setId("d"+i);
+     gridPanel.setWidget(i,3,deletegroupbutton);
+  }
+    else{
+         gridPanel.setWidget(i,3,app.createLabel(" "));
+  }
+  
+    
+    
+    
+    label = app.createLabel(groupname);
+   
+    var showbutton = app.createButton("show");
+    showbutton.addClickHandler(showhandler).setId("s"+i);
+ 
+    var addtogroupbutton = app.createButton("add to group");
+    addtogroupbutton.addClickHandler(addtogrouphandler).setId("a"+i);
+
+    
+    gridPanel.setWidget(i,0,label);
+    gridPanel.setWidget(i,1,showbutton);
+    gridPanel.setWidget(i,2,addtogroupbutton);
+    //app.add(app.createLabel(groupname));
+  } 
+  
+    var emptylabel= app.createLabel(" ");
+  
+    var deleteallgroupbutton = app.createButton("delete all groups");
+    gridPanel.setWidget(i,0,deleteallgroupbutton);
+    gridPanel.setWidget(i,1,emptylabel);
+    gridPanel.setWidget(i,2,emptylabel);
+    gridPanel.setWidget(i,3,emptylabel);
+    var deleteallgrouphandler= app.createServerClickHandler('deleteallgroup');
+    deleteallgrouphandler.addCallbackElement(gridPanel);
+    deleteallgroupbutton.addClickHandler(deleteallgrouphandler);
+  
+  
+  hpanel.add(gridPanel);
+  app.add(hpanel);
+  return app;
+ }
+
+
+
+function grouphandler(e) {
+  
+   var app = UiApp.getActiveApplication();
+   var vpanel = app.getElementById("vpanel");
+   var hpanel = app.getElementById("hpanel");
+   var gridPanel = app.getElementById("gridp");
+   var action = e.parameter.source.charAt(0);
+   var row = +e.parameter.source.substr(1);
+   var contactgroup =ContactsApp.getContactGroups();
+  
+  if( action == "s" ) {
+    //show
+    
+   var group=contactgroup[row];
+   var contacts =group.getContacts();
+   var numofcontact =contacts.length;
+    
+    gridPanel.resize(numofcontact+1,5);
+    
+    gridPanel.setWidget(0, 0,app.createLabel("NAME"));
+    //gridPanel.setWidget(0, 1,app.createLabel("LAST NAME"));
+    gridPanel.setWidget(0, 3,app.createLabel("ADDRESS"));
+    gridPanel.setWidget(0, 2,app.createLabel("PHONE NO"));
+    gridPanel.setWidget(0, 1,app.createLabel("EMAIL ADDRESS"));
+    //gridPanel.setWidget(0, 5,app.createLabel(" "));
+    //gridPanel.setWidget(0, 6,app.createLabel(" "));
+    gridPanel.setWidget(0, 4,app.createLabel(" ")); 
+    var removehandler = app.createServerClickHandler("removefunction");
+    removehandler.addCallbackElement(gridPanel);
+    
+    
+    
+     for(var i=0;i<numofcontact;i++)
+   {
+   
+        //Get the full name, If it is null, display 'Not available'
+          if(contacts[i].getFullName()!='')gridPanel.setWidget(i+1, 0, app.createLabel(contacts[i].getFullName()));
+        else
+          gridPanel.setWidget(i+1, 0, app.createLabel('Not Available').setStyleAttribute('color', 'red'));
+        
+        //Get the First Email address, If it is undefined, display 'Not Available'
+        try{
+          gridPanel.setWidget(i+1, 1, app.createLabel(contacts[i].getEmails()[0].getAddress()));
+        }
+        catch(e){
+          gridPanel.setWidget(i+1, 1, app.createLabel('Not Available').setStyleAttribute('color', 'red'));
+        }
+        
+        //Get the first phone number, If it is undefined, display 'Not Available'
+        try{
+          gridPanel.setWidget(i+1, 2, app.createLabel(contacts[i].getPhones()[0].getPhoneNumber())); 
+        }
+        catch(e){
+          gridPanel.setWidget(i+1, 2, app.createLabel('Not Available').setStyleAttribute('color', 'red'));
+        }
+        
+        //Get the first address, If it is undefined, display 'Not Available'
+        try{
+          gridPanel.setWidget(i+1, 3, app.createLabel(contacts[i].getAddresses()[0].getAddress())); 
+        }
+        catch(e){
+          gridPanel.setWidget(i+1, 3, app.createLabel('Not Available').setStyleAttribute('color', 'red'));
+        }
+       
+     
+     
+        var removebutton = app.createButton("remove");
+        removebutton.addClickHandler(removehandler).setId(i+row);
+   
+  
+        gridPanel.setWidget(i+1,4, removebutton);      
+    
+   } 
+    
+     return app;
+    
+    
+  } 
+  
+  else if( action == "d" ) {
+    //delete
+    contactgroup[row].deleteGroup();
+  }
+  
+  
+  else if( action =="a"){
+    //add
+    var group = contactgroup[row];
+    var gname = group.getName();
+   // app.add(app.createLabel(gname));
+    gridPanel.resize(6, 2);
+    var namelabel = app.createLabel("first name");
+    var lastnamelabel = app.createLabel("last name");
+    var addresslabel = app.createLabel("address");
+    var phonelabel = app.createLabel("phone no.");
+    var emaillabel = app.createLabel("email");
+    var submithandler = app.createServerClickHandler("onsubmitx");
+    submithandler.addCallbackElement(gridPanel);
+    var submitbutton = app.createButton("submit").setId(row);
+    var addfromexistinghandler = app.createServerClickHandler("addfromexisting");
+    addfromexistinghandler.addCallbackElement(gridPanel);
+    var addfromexistingbutton = app.createButton("add from existing").setId("x"+row);
+    addfromexistingbutton.addClickHandler(addfromexistinghandler);
+    submitbutton.addClickHandler(submithandler);
+    var emptylabel = app.createLabel(" ");
+    var name = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    name.setName("name");
+    var lastname = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    lastname.setName("lastname");
+    var address = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    address.setName("address");
+    var phone = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    phone.setName("phone");
+    var email = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    email.setName("email");
+   
+    gridPanel.setWidget(0,0,namelabel);
+    gridPanel.setWidget(0,1,name);                    
+    gridPanel.setWidget(1,0,lastnamelabel);
+    gridPanel.setWidget(1,1,lastname);
+    gridPanel.setWidget(2,0,addresslabel);
+    gridPanel.setWidget(2,1,address);
+    gridPanel.setWidget(3,0,phonelabel);
+    gridPanel.setWidget(3,1,phone);
+    gridPanel.setWidget(4,0,emaillabel);
+    gridPanel.setWidget(4,1,email);
+    gridPanel.setWidget(5,0,submitbutton);
+    gridPanel.setWidget(5,1,addfromexistingbutton);
+  }
+    
+    return app;
+  
+
+ }
+
+  
+  function addfromexisting(e)
+  {
+    var app = UiApp.getActiveApplication();
+    var vpanel = app.getElementById("vpanel");
+    var hpanel = app.getElementById("hpanel");
+    var gridPanel = app.getElementById("gridp");
+    
+    var action = e.parameter.source.charAt(0);
+    var row = +e.parameter.source.substr(1);
+  //  app.add(app.createLabel(row));
+    
+    var contactgroups= ContactsApp.getContactGroups();
+    var group = contactgroups[row];
+    var groupname = group.getName();
+  //  app.add(app.createLabel(group.getName()));
+    
+    var contacts = ContactsApp.getContacts();
+    var numofcontacts = contacts.length;
+    
+    gridPanel.resize(numofcontacts+1,5);
+    for(var i=0; i<numofcontacts; i++)
+    {
+      var name = contacts[i].getFullName()||" ";
+      var namelabel = app.createLabel(name);
+      var email = contacts[i].getPrimaryEmail()||" ";
+      var emaillabel = app.createLabel(email);
+      try{
+      var phone = contacts[i].getPhones()[0].getPhoneNumber()||" ";
+      }
+      catch(a){
+        var phone = " ";
+      }
+        
+        var phonelabel = app.createLabel(phone);
+      try{
+      var address = contacts[i].getAddresses()[0].getAddress()||" ";
+      }
+      catch(a){
+        var address = " ";
+      }
+      var addresslabel = app.createLabel(address);
+      gridPanel.setWidget(i,0,namelabel);
+      gridPanel.setWidget(i,1,emaillabel);
+      gridPanel.setWidget(i,2,phonelabel);
+      gridPanel.setWidget(i,3,addresslabel);
+var addhandler = app.createServerClickHandler("addthis");
+      addhandler.addCallbackElement(gridPanel);
+    var addbutton = app.createButton("add this").setId("a"+i);
+      addbutton.addClickHandler(addhandler);
+  gridPanel.setWidget(i,4,addbutton);
+    } 
+    var tb = app.createTextBox().setText(groupname).setName("tb").setVisible(false);
+    gridPanel.setWidget(i,0,tb);
+    return app;
+  }
+  
+  
+  function addthis(e){
+    var app = UiApp.getActiveApplication();
+    var vpanel = app.getElementById("vpanel");
+    var hpanel = app.getElementById("hpanel");
+    var gridPanel = app.getElementById("gridp");
+     var action = e.parameter.source.charAt(0);
+     var contactno = +e.parameter.source.substr(1);
+   // app.add(app.createLabel(ContactsApp.getContacts()[contactno].getFullName()));
+    var groupname = e.parameter.tb;
+   // app.add(app.createLabel(groupname));
+    var currentgroup = ContactsApp.getContactGroup(groupname);
+    var currentcontact = ContactsApp.getContacts();
+    var cc = currentcontact[contactno];
+    currentgroup.addContact(cc);
+    return app;
+  }
+  
+
+
+
+function onsubmitx(a){
+   var app = UiApp.getActiveApplication();
+   var vpanel = app.getElementById("vpanel");
+   var hpanel = app.getElementById("hpanel");
+   var gridPanel = app.getElementById("gridp");
+
+     var index = +a.parameter.source;
+   var contactgroups= ContactsApp.getContactGroups();
+    
+  //  app.add(app.createLabel(index+""));
+    
+var contactgroup= contactgroups[index];
+
+  try{name=a.parameter.name||" "}catch(a){name = " "}; 
+  try{familyname=a.parameter.lastname||" "}catch(a){familyname=" "};
+  try{address=a.parameter.address||" "}catch(a){address=" "};
+  try{mobile=a.parameter.phone||" "}catch(a){mobile = " "};
+  try{email=a.parameter.email||" "}catch(a){email = " "};
+
+var c = ContactsApp.createContact(name,familyname, email);
+    try{
+  c.addPhone("mobile", mobile);
+    }
+    catch(a)
+    {
+      c.addPhone("mobile", "nil ");
+    }
+
+    
+    try{
+  c.addAddress("home",address);
+    }
+    catch(a){
+      c.addAddress("home","nil");
+    }
+   var label= app.createLabel("contact added successfully");
+    contactgroup.addContact(c);
+  app.add(label);
+  app.add(hpanel);
+ 
+return app;
+    
+    
+    
+  }
+
+
+
+
+
+
+function removefunction(e){
+  var app = UiApp.getActiveApplication();
+  var gridPanel=app.getElementById('gridp');
+  var hpanel = app.getElementById('hpanel');  
+  var action = e.parameter.source.charAt(0);
+  var row = +e.parameter.source.substr(1);
+  var contactgroup = ContactsApp.getContactGroups();
+ var group= contactgroup[row];
+var contacts = group.getContacts();
+  var contact= contacts[action];
+
+   contactgroup[row].removeContact(contact);
+app.add(app.createLabel("completed"));
+//app.add(app.createLabel(action));
+//  app.add(app.createLabel(contact.getFullName()));
+ // app.add(app.createLabel(group.getName()));        
+  return app;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+function deleteallgroup()
+{
+  var app = UiApp.getActiveApplication();
+  var vpanel = app.getElementById("vpanel");
+  var hpanel = app.getElementById("hpanel");
+  var gridPanel = app.getElementById("gridp");
+  var contactgroup = ContactsApp.getContactGroups();
+  var lengthofgroup = contactgroup.length;
+  for(var i=0; i< lengthofgroup; i++)
+  {
+   var g = contactgroup[i].getName();
+    if(g.match(/System[\sa-zA-Z:]*/)== null)
+      contactgroup[i].deleteGroup();   
+  } 
+app.add(hpanel);
+  return app;
+} 
+
+
+
+
+function createevent(){
+  var app = UiApp.getActiveApplication();
+  var gridPanel= app.getElementById("gridp");
+  var hpanel = app.getElementById("hpanel");
+  var vpanel = app.getElementById("vpanel");
+  gridPanel.resize(5,2);
+  var titlelabel =app.createLabel("Title for the event");
+  var title = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  title.setName("title");
+  createDatePicker(app);
+  var datehandler =app.createServerClickHandler("pickDate");
+  
+  var startdatelabel = app.createLabel("start date(mm/dd/yyyy)");
+  var startdate = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  startdate.setName("startdate").addClickHandler(datehandler);
+  var enddatelabel = app.createLabel("end date(mm/dd/yyyy)");
+  var enddate = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  enddate.setName("enddate").addClickHandler(datehandler);
+  var loclabel = app.createLabel("location");
+  var loc = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  loc.setName("loc");
+  var submithandler  = app.createServerClickHandler("onsubmit");
+  submithandler.addCallbackElement(gridPanel);
+ 
+  var submitbutton= app.createButton("create event");
+  submitbutton.addClickHandler(submithandler);
+  
+  var emptylabel = app.createLabel(" ");
+  
+  gridPanel.setWidget(0,0,titlelabel);
+  gridPanel.setWidget(0,1,title);
+  gridPanel.setWidget(1,0,startdatelabel);
+  gridPanel.setWidget(1,1,startdate);
+  gridPanel.setWidget(2,0,enddatelabel);
+  gridPanel.setWidget(2,1,enddate);
+  gridPanel.setWidget(3,0,loclabel);
+  gridPanel.setWidget(3,1,loc);
+  gridPanel.setWidget(4,0,submitbutton);
+  gridPanel.setWidget(4,1,emptylabel);
+
+   hpanel.add(gridPanel);
+  return app;
+  
+}
+
+
+function onsubmit(c){
+
+var app= UiApp.getActiveApplication();
+ var title = c.parameter.title;
+  var startdate = c.parameter.startdate;
+  var enddate = c.parameter.enddate;
+  var loc = c.parameter.loc||"";
+  var cal = CalendarApp.getDefaultCalendar();
+
+ // app.add(app.createLabel(cal.getId()));
+//  app.add(app.createLabel(cal.getName()));      
+  cal.createEvent(title, new Date(startdate), new Date(enddate), {location:loc});
+app.add(app.createLabel(startdate+" event created"));
+  return app;
+}
+
+function groupemail(){
+
+var app= UiApp.createApplication();
+var gridPanel = app.getElementById("gridp");
+  gridPanel.resize(4,2);
+  
+  var hpanel = app.getElementById("hpanel");
+  var groupnamelabel = app.createLabel("group name");
+  
+  
+  
+  
+  
+  var groupname = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000").setName("groupname");
+  
+  //var handlerx = app.createServerChangeHandler("onchange");
+  //handlerx.addCallbackElement(gridPanel);
+  //var groupname= app.createListBox().setId('groupname').setName('groupname').addChangeHandler(handlerx);
+ 
+ // var contactgroup = ContactsApp.getContactGroups();
+ // var numofcontactgroup = contactgroup.length;
+ 
+ // var changehandler = app.createServerClickHandler("onchange");
+  //changehandler.addCallbackElement(gridPanel);
+  
+ // for(var i =0; i<numofcontactgroup; i++)
+ // {
+  //  var name = contactgroup[i].getName();
+ //   groupname.addItem(name);
+    
+ // }
+  //groupname.addChangeHandler(changehandler);
+  
+                                                  
+  var subjectlabel= app.createLabel("subject of mail");
+  var subject= app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    subject.setName("subject");
+  var maillabel= app.createLabel("content of mail");
+  var mail = app.createTextArea().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+     mail.setName("mail");
+  var sendbutton = app.createButton("send");
+  var emptylabel = app.createLabel(" ");
+  
+  var sendhandler = app.createServerClickHandler("send");
+  sendhandler.addCallbackElement(gridPanel);
+  sendbutton.addClickHandler(sendhandler);
+
+  gridPanel.setWidget(0,0,groupnamelabel);
+  gridPanel.setWidget(0,1,groupname);
+  gridPanel.setWidget(1,0,subjectlabel);
+  gridPanel.setWidget(1,1,subject);
+  gridPanel.setWidget(2,0,maillabel);
+  gridPanel.setWidget(2,1,mail);
+  gridPanel.setWidget(3,0,emptylabel);
+  gridPanel.setWidget(3,1,sendbutton);
+  hpanel.add(gridPanel);
+ //app.add(hpanel);
+  
+  return app;
+  
+}
+
+
+function onchange(e)
+{
+ var app= UiApp.getActiveApplication();
+ // app.add(app.createLabel(e.parameter.groupname));
+  return app;
+}
+
+
+
+function send(e){
+  var app=  UiApp.getActiveApplication();
+  var hpanel = app.getElementById("hpanel");
+  var gridPanel = app.getElementById("gridp");
+  var groupname = e.parameter.groupname;
+  var subject = e.parameter.subject;
+  var mail = e.parameter.mail;
+  contactgroup = ContactsApp.getContactGroup(groupname);
+  contacts = contactgroup.getContacts();
+  var numberofcontact = contacts.length;
+   for(var i= 0; i< numberofcontact; i++)
+  {
+    var email=contacts[0].getPrimaryEmail();
+    MailApp.sendEmail(email, subject, mail);
+  }
+  return app;
+
+}
+
+
+
+
+
+function contactus() {
+  //Create User Interface and Style the form Elements
+  var app = UiApp.getActiveApplication();
+  var vpanel = app.getElementById("vpanel");
+  var hpanel = app.getElementById("hpanel");
+  var gridPanel = app.getElementById("gridp");
+  gridPanel.resize(4,2);
+  gridPanel.setWidget(0,0,app.createLabel("your name"));
+  gridPanel.setWidget(1,0,app.createLabel("your email id"));
+  gridPanel.setWidget(2,0,app.createLabel("inquiry"));
+  var name = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000").setName("name");
+ 
+  var email = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  email.setName("email");
+  var message = app.createTextArea().setStyleAttribute('marginLeft', '20').setWidth('300').setHeight('100').setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  message.setName("message");
+  gridPanel.setWidget(0,1,name);
+  gridPanel.setWidget(1,1,email);
+  gridPanel.setWidget(2,1,message);
+  
+  var submithandler = app.createServerClickHandler("validateAndMail");
+  submithandler.addCallbackElement(gridPanel);                    
+  var submitbutton = app.createButton("submit");
+  
+  
+  submitbutton.addClickHandler(submithandler);
+  gridPanel.setWidget(3,1,submitbutton);
+  gridPanel.setWidget(3,0,app.createLabel(""));
+  hpanel.add(gridPanel);
+  return app;
+}
+
+function validateAndMail(e){
+  var adminsEmail = "rock.raghavag@gmail.com";
+  var app = UiApp.getActiveApplication();
+  var name = e.parameter.name;
+  var email = e.parameter.email;
+  var message = e.parameter.message;
+  
+  MailApp.sendEmail(adminsEmail, "[Google Apps Script Project]:" +name+ " has contacted you for help", 'textBody', {htmlBody: '<b>Hi...</b><br/>'+message+'<br/>Please reply on my mail:'+email,replyTo: email});
+  
+  
+  return app;
+}
+
+
+function listallevent(){
+  var app = UiApp.getActiveApplication();
+  var hpanel = app.getElementById("hpanel");
+  var vpanel = app.getElementById("vpanel");
+  var gridPanel = app.getElementById("gridp");
+ gridPanel.resize(2,4);
+  var fromlabel = app.createLabel("from");
+  var fromdate = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  fromdate.setName("fromdate");
+ createDatePicker(app);
+  var datehandler = app.createServerClickHandler("pickDate");
+  
+  fromdate.addClickHandler(datehandler);
+  
+  var tolabel = app.createLabel("to");
+  var todate = app.createTextBox().setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+  todate.setName("todate");
+  todate.addClickHandler(datehandler);
+  var emptylabel = app.createLabel(" ");
+  var listhandler = app.createServerClickHandler("list");
+  listhandler.addCallbackElement(gridPanel);
+  var listbutton = app.createButton("list");
+  listbutton.addClickHandler(listhandler);
+  //app.add(app.createLabel("all dates are in format mm/dd/yyyy"));
+  gridPanel.setWidget(0,0,fromlabel);
+  gridPanel.setWidget(0,1,fromdate);
+  gridPanel.setWidget(0,2,tolabel);
+  gridPanel.setWidget(0,3,todate);
+  gridPanel.setWidget(1,0,listbutton);
+  gridPanel.setWidget(1,1,emptylabel);
+  gridPanel.setWidget(1,2,emptylabel);
+  gridPanel.setWidget(1,3,emptylabel);
+  hpanel.add(gridPanel);
+  return app;
+  
+
+}
+
+function list(e){
+  var app = UiApp.getActiveApplication();
+  var hpanel = app.getElementById("hpanel");
+  var vpanel = app.getElementById("vpanel");
+  var gridPanel = app.getElementById("gridp");
+  var fromdate = e.parameter.fromdate;
+  var todate = e.parameter.todate;
+  var tb1 = app.createTextBox().setText(fromdate).setName("tb1").setVisible(false);
+  var tb2 = app.createTextBox().setText(todate).setName("tb2").setVisible(false);
+  
+//  app.add(app.createLabel(fromdate));
+//  app.add(app.createLabel(todate));
+  var startdate = new Date(fromdate);
+  var enddate = new Date(todate);
+  var cal = CalendarApp.getDefaultCalendar();
+  var events = cal.getEvents(startdate, enddate);
+  var numofevents = events.length;
+ // app.add(app.createLabel(numofevents));
+  gridPanel.resize(numofevents+1,6);
+  
+  gridPanel.setWidget(0,0,app.createLabel("TITLE"));
+  gridPanel.setWidget(0,1,app.createLabel("START TIME"));
+  gridPanel.setWidget(0,2,app.createLabel("END TIME"));
+  gridPanel.setWidget(0,3,app.createLabel(" "));
+  gridPanel.setWidget(0,4,tb1);
+  gridPanel.setWidget(0,5,tb2);
+
+  var alleventhandler = app.createServerClickHandler("alleventhandler");
+  alleventhandler.addCallbackElement(gridPanel);
+  if(numofevents>0)
+  {
+    for(var i=0;i<numofevents;i++)
+    {
+      gridPanel.setWidget(i+1,0,app.createLabel(events[i].getTitle()));
+      gridPanel.setWidget(i+1,1,app.createLabel(events[i].getStartTime()));
+      gridPanel.setWidget(i+1,2,app.createLabel(events[i].getEndTime()));
+      var deleteeventbutton = app.createButton("delete");
+      deleteeventbutton.addClickHandler(alleventhandler).setId("d"+i);
+      gridPanel.setWidget(i+1,3,deleteeventbutton);
+
+      var addguestbutton = app.createButton("add guest");
+      addguestbutton.addClickHandler(alleventhandler).setId("a"+i);
+      gridPanel.setWidget(i+1,4,addguestbutton);
+
+      var listguestbutton = app.createButton("list guests");
+      listguestbutton.addClickHandler(alleventhandler).setId("l"+i);
+      gridPanel.setWidget(i+1,5,listguestbutton);
+
+      
+      
+      
+      
+      
+    }
+  }
+  else
+  {
+    app.add(app.createLabel("no events exist between these dates"));
+  }
+ 
+                                                  
+  
+  hpanel.add(gridPanel);
+  
+  
+  
+  return app;
+}
+
+
+
+
+
+function alleventhandler(e){
+ var app = UiApp.getActiveApplication();
+ var gridPanel = app.getElementById("gridp");
+ var vpanel = app.getElementById("vpanel");
+ var hpanel = app.getElementById("hpanel");
+  var action = e.parameter.source.charAt(0);
+  var fromdate= e.parameter.tb1;
+  var todate = e.parameter.tb2;
+  var row = +e.parameter.source.substr(1);
+  var cal = CalendarApp.getDefaultCalendar();
+  
+//  app.add(app.createLabel(fromdate));
+ // app.add(app.createLabel(fromdate));
+ // app.add(app.createLabel(row));
+  
+  var startdate = new Date(fromdate);
+  var enddate = new Date(todate);
+  
+  var events = cal.getEvents(startdate, enddate);
+  var event = events[row];
+  
+  
+  if(action == "d"){
+  //delete the event
+    events[row].deleteEvent();
+  }
+  else if(action == "a"){
+  //add a guest
+    var addhandler= app.createServerClickHandler("addguest").addCallbackElement(gridPanel);
+    gridPanel.resize(2,4);
+    gridPanel.setWidget(0,0,app.createLabel("enter email address"));
+    var email = app.createTextBox().setName("email").setStyleAttribute("backgroundColor", "#99FFCC").setStyleAttribute("border", "1px solid #008000");
+    gridPanel.setWidget(0,1,email);
+    var addbutton = app.createButton("add").addClickHandler(addhandler).setId(row);
+    gridPanel.setWidget(1,0,addbutton);
+    gridPanel.setWidget(1,1,app.createLabel(" "));
+    var tb1 = app.createTextBox().setText(fromdate).setName("fromdate").setVisible(false);
+    var tb2 = app.createTextBox().setText(todate).setName("todate").setVisible(false);
+    gridPanel.setWidget(0,2,tb1);
+    gridPanel.setWidget(0,3,tb2);
+    gridPanel.setWidget(1,2,app.createLabel(""));
+    gridPanel.setWidget(1,3,app.createLabel(""));
+  }
+  
+  else if(action == "l"){
+  //list all guests
+  var guests = events[row].getGuestList();
+    var numofguest = guests.length;
+    gridPanel.resize((numofguest+1),3)
+    gridPanel.setWidget(0,0,app.createLabel("guest name"));
+    gridPanel.setWidget(0,1,app.createLabel("guest email"));  
+     
+    if(numofguest>0){
+      for(var i=0;i<numofguest;i++){
+        gridPanel.setWidget(i+1,0,app.createLabel(guests[i].getName()));
+        gridPanel.setWidget(i+1,1,app.createLabel(guests[i].getEmail()));                    
+        
+      }
+    }
+    else{
+      app.add(app.createLabel("no guest for this event"));
+    }
+  
+  }  
+    return app;
+}
+
+  
+  function addguest(e){
+   var app= UiApp.getActiveApplication();
+    var vpanel = app.getElementById("vpanel");
+    var hpanel = app.getElementById("hpanel");
+    var gridPanel= app.getElementById("gridp");
+    var fromdate = e.parameter.fromdate;
+    var todate = e.parameter.todate;
+    var startdate = new Date(fromdate);
+    var enddate = new Date(todate);
+    var email = e.parameter.email;
+    var row= e.parameter.source;
+   // app.add(app.createLabel(row));
+   // app.add(app.createLabel(email));
+  //  app.add(app.createLabel(fromdate));
+    
+   // app.add(app.createLabel(todate));
+  var cal = CalendarApp.getDefaultCalendar();
+    var events = cal.getEvents(startdate, enddate);
+   var event = events[row];
+    event.addGuest(email);
+    
+    return app;  
+  }
+  
+
+
+
+
+
+//**********Date Picker code starts here
+//Global Parameters for date Picker
+numFutureYear = 6;//Change as per your requirement
+numPastYear = 60;//Change as per your requirement
+scriptTimeZone = 'GMT+5:30'//This time zone should be same as the script Timezone
+  //To know the Timezone of your script, Goto File->Properties->TimeZone in script editor
+dateFormat = 'MM/dd/yyyy';//Change as per your requirement
+monthArray = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+daysArray = ['S','M','T','W','T','F','S'];
+today = new Date();
+
+//########Do not change anything after this line
+function createDatePicker(app){
+    var datePanel = app.createVerticalPanel().setId('outerPanel')
+      .setStyleAttribute('border','1px solid black')
+      .setVisible(false).setStyleAttribute('backgroundColor','Bisque');
+  var monthListBox = app.createListBox().setId('monthListBox')
+      .setStyleAttribute('backgroundColor','Bisque');
+  var yearListBox = app.createListBox().setId('yearListBox')
+      .setStyleAttribute('backgroundColor','Bisque');
+  var hiddenBox = app.createTextBox().setVisible(false).setId('hiddenTB');
+  var dateGrid = app.createGrid(7,7);
+  for(var l = 0; l<7; l++){
+    dateGrid.setWidget(0, l, app.createLabel(daysArray[l])
+                       .setStyleAttribute('fontSize','8pt')
+                      .setStyleAttribute('fontWeight','bold')
+                      .setStyleAttribute('textAlign', 'center')
+                      .setStyleAttribute('color','black')
+                      .setWidth('17px'));
+  }
+  var dateId = 0;
+  for (var m = 1; m<7; m++){
+    for(var n = 0; n<7; n++){
+      dateGrid.setWidget(m, n, app.createLabel('xx').setId('dl'+dateId)
+                         .setStyleAttribute('fontSize','8pt')
+                        .setStyleAttribute('textAlign', 'center')
+                        .setStyleAttribute('color','black'));
+      dateId++;
+    }
+  }
+  var listBoxGrid = app.createGrid(1,3);
+  listBoxGrid.setWidget(0,0,monthListBox).setWidget(0,1,yearListBox)
+    .setWidget(0,2,app.createLabel(" "));
+  datePanel.add(listBoxGrid).add(dateGrid).add(hiddenBox);
+  app.add(datePanel);
+  var monthListBox = app.getElementById('monthListBox').setName('monthListBox').setStyleAttribute('fontSize','8pt');
+  for (var i = 0; i< monthArray.length; i++) monthListBox.addItem(monthArray[i]);
+  monthListBox.setSelectedIndex(today.getMonth());
+  var yearListBox = app.getElementById('yearListBox').setName('yearListBox').setStyleAttribute('fontSize','8pt');
+  var startYear = today.getYear() - numPastYear;
+  for (var i = 0; i<= numPastYear+numFutureYear; i++){
+  yearListBox.addItem(startYear.toString());
+    startYear++;}
+  yearListBox.setSelectedIndex(numPastYear);
+  var dateHandler = app.createServerChangeHandler('updatePicker');
+  dateHandler.addCallbackElement(app.getElementById('outerPanel'));
+  yearListBox.addChangeHandler(dateHandler);
+  monthListBox.addChangeHandler(dateHandler);
+  var currentYear = today.getYear();
+  var currentMonth = today.getMonth();
+  var numDaysInCurrentMonth = 32 - new Date(currentYear, currentMonth, 32).getDate();
+  var day1ofcurrentMonth = new Date(currentYear, currentMonth, 1).getDay();
+  for(var i = 0; i < 42; i++){
+    var dlId = 'dl'+i;
+    if(i < day1ofcurrentMonth || i >= day1ofcurrentMonth+numDaysInCurrentMonth)
+      app.getElementById(dlId).setVisible(false);
+    else
+      app.getElementById(dlId).setText((i-day1ofcurrentMonth+1).toString()).setVisible(true);
+  }
+  var dateSelectHandler = app.createServerClickHandler('selectDate');
+  dateSelectHandler.addCallbackElement(app.getElementById('outerPanel'));
+  for (var j = 0; j<42; j++){
+  var dlId = 'dl'+j;
+    app.getElementById(dlId).addClickHandler(dateSelectHandler);
+  }
+  app.add(datePanel);
+}
+
+
+function pickDate(p){
+  var app = UiApp.getActiveApplication();
+  app.getElementById('monthListBox').setSelectedIndex(today.getMonth());
+  app.getElementById('yearListBox').setSelectedIndex(numPastYear);
+  app.getElementById('outerPanel').setVisible(true);
+  var hiddenBox = app.getElementById('hiddenTB').setText(p.parameter.source).setName('hiddenTB');
+  app.getElementById('outerPanel').setStyleAttribute('top',p.parameter.clientY)
+    .setStyleAttribute('left',p.parameter.clientX).setStyleAttribute('zIndex','1')
+    .setStyleAttribute('position','fixed');
+  return app;
+}
+
+function updatePicker(q){
+  var app =UiApp.getActiveApplication();
+  var selctedYear = q.parameter.yearListBox;
+  var selctedMonth = monthArray.indexOf(q.parameter.monthListBox);
+  var numDays = 32 - new Date(selctedYear, selctedMonth, 32).getDate();
+  var day1 = new Date(selctedYear, selctedMonth, 1).getDay();
+  for(var i = 0; i < 42; i++){
+    var dlId = 'dl'+i;
+    if(i < day1 || i >= day1+numDays)
+      app.getElementById(dlId).setVisible(false);
+    else
+      app.getElementById(dlId).setText((i-day1+1).toString()).setVisible(true);
+  }
+  return app;
+}
+function selectDate(e){
+  var app = UiApp.getActiveApplication();
+  var selectedDateId = e.parameter.source.split('l')[1];
+  var month = e.parameter.monthListBox;
+  var year = e.parameter.yearListBox;
+  var day1ofSelectedMonth = new Date(year, monthArray.indexOf(month), 1).getDay();
+  var dd = selectedDateId-day1ofSelectedMonth+1;
+  var date = new Date(year, monthArray.indexOf(month), dd);
+  var formattedDate = Utilities.formatDate(date, scriptTimeZone, dateFormat);
+  app.getElementById(e.parameter.hiddenTB).setText(formattedDate);
+  app.getElementById('outerPanel').setVisible(false);
+  return app;
+}
+///////////Date Picker code ends here
+
+
+
+
+function mousehandler(e){
+  var app = UiApp.getActiveApplication();
+  
+  var mainPanel = app.getElementById("mainPanel");
+  
+  var refresh = app.getElementById("refresh");
+  refresh.setStyleAttribute("cursor" , "pointer");
+  var manage = app.getElementById("manage");
+  manage.setStyleAttribute("cursor", "not-allowed");
+  var addcontact = app.getElementById("addcontact");
+  addcontact.setStyleAttribute("cursor", "pointer");
+  var listallcontacts = app.getElementById("listallcontacts");
+  listallcontacts.setStyleAttribute("cursor", "pointer");
+  var creategroup = app.getElementById("creategroup");
+  creategroup.setStyleAttribute("cursor", "pointer");
+  var listgroup = app.getElementById("listgroup");
+  listgroup.setStyleAttribute("cursor", "pointer");
+  var createevent = app.getElementById("createevent");
+  createevent.setStyleAttribute("cursor", "pointer");
+  var groupemail = app.getElementById("groupemail");
+  groupemail.setStyleAttribute("cursor", "pointer");
+  var contactus = app.getElementById("contactus");
+  contactus.setStyleAttribute("cursor", "pointer");
+  var listallevent = app.getElementById("listallevent");
+  listallevent.setStyleAttribute("cursor", "pointer");
+  return app;
+}
